@@ -11,6 +11,8 @@ public class ParticleBoids : MonoBehaviour
 	public int particlesCount = 100;
 	public float minDistanceBetween = 10.0f;
 
+	GameObject[] targetsArray;
+
 	void Start () 
 	{
 
@@ -32,6 +34,9 @@ public class ParticleBoids : MonoBehaviour
 			particlesPositionsArray[i] = particlesArray[i].position;
 			particlesVelocitiesArray[i] = Vector3.zero; //new Vector3( Random.Range(-1.0f,1.0f) , Random.Range(-1.0f,1.0f), Random.Range(-1.0f,1.0f));
 		}
+
+		targetsArray = GameObject.FindGameObjectsWithTag("Target");
+	
 	}
 
 		
@@ -39,12 +44,20 @@ public class ParticleBoids : MonoBehaviour
 
 	void Update () 
 	{
-
+		// velocity decay
 		for(int i = 0; i < particleSystem.particleCount; i++)
 		{
 			particlesVelocitiesArray[i] -= particlesVelocitiesArray[i] * Time.deltaTime;
 		}
 
+		//// MOVE TOWARDS AT TARGET (just set velocty)
+		for(int i = 0; i < particleSystem.particleCount; i++)
+		{
+			particlesVelocitiesArray[i] = Vector3.Lerp(particlesVelocitiesArray[i], ( targetsArray[0].transform.position - particlesPositionsArray[i]).normalized, 10.0f * Time.deltaTime);
+		}
+
+
+		//// AVOID OTHER BOIDS
 		// update internal models
 		for(int i = 0; i < particleSystem.particleCount; i++)
 		{
