@@ -14,7 +14,7 @@ public class ParticleBoids : MonoBehaviour
 		{
 			particlesArray[i].color = Color.white;
 			particlesArray[i].position = 4.0f * Random.onUnitSphere;
-			particlesArray[i].axisOfRotation = Random.insideUnitSphere.normalized;
+			particlesArray[i].axisOfRotation = Quaternion.identity.eulerAngles.normalized; //Random.insideUnitSphere.normalized;
 			particlesArray[i].rotation = Random.Range(0.0f,360.0f);
 			particlesArray[i].size = 0.10f;
 		}
