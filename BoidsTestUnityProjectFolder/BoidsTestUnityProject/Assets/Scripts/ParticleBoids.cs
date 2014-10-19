@@ -18,7 +18,7 @@ public class ParticleBoids : MonoBehaviour
 		for(int i = 0; i < particlesArray.Length; i++)
 		{
 			particlesArray[i].color = Color.white;
-			particlesArray[i].position = 1.0f * Random.onUnitSphere;
+			particlesArray[i].position = 10.0f * Random.onUnitSphere;
 			particlesArray[i].axisOfRotation = Quaternion.identity.eulerAngles.normalized; //Random.insideUnitSphere.normalized;
 			particlesArray[i].rotation = Random.Range(0.0f,360.0f);
 			particlesArray[i].size = 0.10f;
@@ -57,7 +57,7 @@ public class ParticleBoids : MonoBehaviour
 
 				if(Vector3.Distance(particlesPositionsArray[i], particlesPositionsArray[j]) < minDistanceBetween)
 				{
-					particlesVelocitiesArray[i] = (particlesPositionsArray[i] - particlesPositionsArray[j]).normalized;
+					particlesVelocitiesArray[i] = Vector3.Lerp( particlesVelocitiesArray[i], (particlesPositionsArray[i] - particlesPositionsArray[j]).normalized, 10.0f * Time.deltaTime);
 					break;
 				}
 
