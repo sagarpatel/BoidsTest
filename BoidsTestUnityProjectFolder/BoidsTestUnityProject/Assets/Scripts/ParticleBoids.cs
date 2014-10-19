@@ -9,6 +9,7 @@ public class ParticleBoids : MonoBehaviour
 	Vector3[] particlesVelocitiesArray;
 
 	public int particlesCount = 100;
+	public float minDistanceBetween = 10.0f;
 
 	void Start () 
 	{
@@ -29,7 +30,7 @@ public class ParticleBoids : MonoBehaviour
 		for(int i = 0; i < particleSystem.particleCount; i++)
 		{
 			particlesPositionsArray[i] = particlesArray[i].position;
-			particlesVelocitiesArray[i] = new Vector3( Random.Range(-1.0f,1.0f) , Random.Range(-1.0f,1.0f), Random.Range(-1.0f,1.0f));
+			particlesVelocitiesArray[i] = Vector3.zero; //new Vector3( Random.Range(-1.0f,1.0f) , Random.Range(-1.0f,1.0f), Random.Range(-1.0f,1.0f));
 		}
 	}
 
@@ -39,11 +40,32 @@ public class ParticleBoids : MonoBehaviour
 	void Update () 
 	{
 
+		for(int i = 0; i < particleSystem.particleCount; i++)
+		{
+			particlesVelocitiesArray[i] -= particlesVelocitiesArray[i] * Time.deltaTime;
+		}
+
 		// update internal models
 		for(int i = 0; i < particleSystem.particleCount; i++)
 		{
-			particlesPositionsArray[i] += particlesVelocitiesArray[i] * Time.deltaTime;
 
+			// velocity update
+			for(int j = 0; j < particleSystem.particleCount; j++)
+			{
+				if(i == j)
+					continue;
+
+				if(Vector3.Distance(particlesPositionsArray[i], particlesPositionsArray[j]) < minDistanceBetween)
+				{
+					particlesVelocitiesArray[i] = (particlesPositionsArray[i] - particlesPositionsArray[j]).normalized;
+					break;
+				}
+
+			}
+
+
+			// position set
+			particlesPositionsArray[i] += particlesVelocitiesArray[i] * Time.deltaTime;
 		}
 
 
